@@ -17,24 +17,26 @@
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script>
-    const murales = [
-      {
-        nombre: "Mural de la Ciencia",
-        autor: "María Pérez",
-        fecha: "2019",
-        lat: 19.020371851541384,
-        lng: -98.24186306135633
-      },
-      {
-        nombre: "Arte y Sociedad",
-        autor: "Luis Gómez",
-        fecha: "2021",
-        lat: 19.018872212782306,
-        lng: -98.23867127000206
-      }
-    ];
+   const murales = [
+  {
+    nombre: "Mural de la Ciencia",
+    autor: "María Pérez",
+    fecha: "2019",
+    lat: 19.020371851541384,
+    lng: -98.24186306135633
+  },
+  {
+    nombre: "Arte y Sociedad",
+    autor: "Luis Gómez",
+    fecha: "2021",
+    lat: 19.018872212782306,
+    lng: -98.23867127000206
+  }
+];
+
 
     const mapa = L.map('map').setView([19.0195, -98.2403], 17);
+
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; OpenStreetMap contributors'
