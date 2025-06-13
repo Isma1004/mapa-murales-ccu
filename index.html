@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Murales del CCU - BUAP</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <style>
+    body { margin: 0; font-family: Arial, sans-serif; }
+    #map { height: 100vh; width: 100%; }
+    .leaflet-popup-content h3 { margin: 0 0 5px; font-size: 16px; }
+    .leaflet-popup-content p { margin: 0; font-size: 14px; }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    const murales = [
+      {
+        nombre: "Mural de la Ciencia",
+        autor: "María Pérez",
+        fecha: "2019",
+        lat: 19.00123,
+        lng: -98.23456
+      },
+      {
+        nombre: "Arte y Sociedad",
+        autor: "Luis Gómez",
+        fecha: "2021",
+        lat: 19.00180,
+        lng: -98.23510
+      }
+    ];
+
+    const mapa = L.map('map').setView([19.0015, -98.2350], 17);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(mapa);
+
+    murales.forEach(mural => {
+      L.marker([mural.lat, mural.lng]).addTo(mapa)
+        .bindPopup(`
+          <h3>${mural.nombre}</h3>
+          <p><strong>Autor:</strong> ${mural.autor}</p>
+          <p><strong>Año:</strong> ${mural.fecha}</p>
+        `);
+    });
+  </script>
+</body>
+</html>
