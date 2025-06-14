@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html data-bs-theme="dark" lang="es-mx">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, shrink-to-fit=no"
+    />
+    <title>Recorrido CCU</title>
+    <link rel="stylesheet" href="../css/bootstrap.min.css" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Inter:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800&amp;display=swap"
+    />
+    <link rel="stylesheet" href="../css/bss-overrides.css" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
+    <style>
+      #map {
+        height: 85vh;
+        width: 100%;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      }
+      .leaflet-popup-content h3 {
+        margin: 0 0 5px;
+        font-size: 16px;
+        color: #0d6efd;
+      }
+      .leaflet-popup-content p {
+        margin: 0;
+        font-size: 14px;
+      }
+
+      .custom-tooltip:hover {
+        cursor: pointer;
+      }
+      .custom-tooltip {
+        display: none;
+        position: absolute;
+        z-index: 10000;
+        background: #fff;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        padding: 10px;
+        /* pointer-events: none; */
+        color: #333;
+      }
+    </style>
+  </head>
+
+  <body>
+    <nav
+      class="navbar navbar-expand-md sticky-top py-3 navbar-dark"
+      id="mainNav"
+    >
+      <div class="container">
+        <a class="navbar-brand d-flex align-items-center" href="/"
+          ><span>Murales Arpa</span></a
+        ><button
+          data-bs-toggle="collapse"
+          class="navbar-toggler"
+          data-bs-target="#navcol-1"
+        >
+          <span class="visually-hidden">Activar/desactivar navegación</span
+          ><span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navcol-1">
+          <ul class="navbar-nav mx-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="/index.html">Inicio</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/pages/recorridos.html"
+                ><span style="font-weight: normal !important"
+                  >Recorridos</span
+                ></a
+              >
+            </li>
+            <li class="nav-item"></li>
+            <li class="nav-item"></li>
+            <li class="nav-item">
+              <a class="nav-link" href="/pages/contactos.html">Contacto</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <section class="py-5">
+      <div class="container py-5">
+        <div class="row mb-5">
+          <div class="col-md-8 col-xl-6 text-center mx-auto">
+            <h2 class="fw-bold">Recorrido CCU</h2>
+            <p class="text-muted">
+              Este recorrido es del Centro Cultural Universitario de la BUAP
+            </p>
+          </div>
+        </div>
+        <section class="py-5">
+          <div class="container text-center py-5">
+            <div class="row mb-4">
+              <div id="map"></div>
+              <div class="custom-tooltip" id="tooltip"></div>
+            </div>
+          </div>
+        </section>
+      </div>
+      <div
+        class="row row-cols-1 row-cols-md-2 mx-auto"
+        style="max-width: 900px"
+      >
+        <div class="col mb-4">
+          <div>
+            <a href="https://www.wikidata.org/wiki/Q134890412"
+              ><img
+                class="rounded img-fluid shadow w-100 fit-cover"
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Saturnino-Moon.jpg/1200px-Saturnino-Moon.jpg?20250613200424"
+                style="height: 250px"
+            /></a>
+            <div class="py-4">
+              <span class="badge bg-primary mb-2">Imagen</span>
+              <h4 class="fw-bold">Saturnino moon</h4>
+            </div>
+          </div>
+        </div>
+        <div class="col mb-4">
+          <div>
+            <a href="https://www.wikidata.org/wiki/Q134890998"
+              ><img
+                class="rounded img-fluid shadow w-100 fit-cover"
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Metamorfosis_Marina.jpg/1278px-Metamorfosis_Marina.jpg?20250613200415"
+                style="height: 250px"
+            /></a>
+            <div class="py-4">
+              <span class="badge bg-primary mb-2">Imagen</span>
+              <h4 class="fw-bold">Metamorfosis marina</h4>
+            </div>
+          </div>
+        </div>
+        <div class="col mb-4">
+          <div>
+            <a href="https://www.wikidata.org/wiki/Q134891010"
+              ><img
+                class="rounded img-fluid shadow w-100 fit-cover"
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/Cansancio_Colectivo.jpg/1200px-Cansancio_Colectivo.jpg?20250613200359"
+                style="height: 250px"
+            /></a>
+            <div class="py-4">
+              <span class="badge bg-primary mb-2">Imagen</span>
+              <h4 class="fw-bold">Cansancio colectivo</h4>
+            </div>
+          </div>
+        </div>
+        <div class="col mb-4">
+          <div>
+            <a href="https://www.wikidata.org/wiki/Q134891055"
+              ><img
+                class="rounded img-fluid shadow w-100 fit-cover"
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Naturaleza_H%C3%ADbrida.jpg/960px-Naturaleza_H%C3%ADbrida.jpg?20250613200422"
+                style="height: 250px"
+            /></a>
+            <div class="py-4">
+              <span class="badge bg-primary mb-2">Imagen</span>
+              <h4 class="fw-bold">Naturaleza Híbrida</h4>
+            </div>
+          </div>
+        </div>
+        <div class="col mb-4">
+          <div>
+            <a href="https://www.wikidata.org/wiki/Q134891056"
+              ><img
+                class="rounded img-fluid shadow w-100 fit-cover"
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/%C2%A1Viva%2C_Viva%21.jpg/500px-%C2%A1Viva%2C_Viva%21.jpg?20250613200355"
+                style="height: 250px"
+            /></a>
+            <div class="py-4">
+              <span class="badge bg-primary mb-2">Imagen</span>
+              <h4 class="fw-bold">Viva viva</h4>
+            </div>
+          </div>
+        </div>
+        <div class="col mb-4">
+          <div>
+            <a href="https://www.wikidata.org/wiki/Q134891073"
+              ><img
+                class="rounded img-fluid shadow w-100 fit-cover"
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Asientos_Preferentes.jpg/960px-Asientos_Preferentes.jpg?20250613200359"
+                style="height: 250px"
+            /></a>
+            <div class="py-4">
+              <span class="badge bg-primary mb-2">Imagen</span>
+              <h4 class="fw-bold">Asientos preferentes</h4>
+            </div>
+          </div>
+        </div>
+        <div class="col mb-4">
+          <div>
+            <a href="https://www.wikidata.org/wiki/Q134891072"
+              ><img
+                class="rounded img-fluid shadow w-100 fit-cover"
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Cumbia_te_voy_a_olvidar.jpg/960px-Cumbia_te_voy_a_olvidar.jpg?20250613200403"
+                style="height: 250px"
+            /></a>
+            <div class="py-4">
+              <span class="badge bg-primary mb-2">Imagen</span>
+              <h4 class="fw-bold">Cumbia te voy a olvidar</h4>
+            </div>
+          </div>
+        </div>
+        <div class="col mb-4">
+          <div>
+            <a href="https://www.wikidata.org/wiki/Q134891430"
+              ><img
+                class="rounded img-fluid shadow w-100 fit-cover"
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/La_Rebeld%C3%ADa_del_Bohemio.jpg/1199px-La_Rebeld%C3%ADa_del_Bohemio.jpg?20250613200409"
+                style="height: 250px"
+            /></a>
+            <div class="py-4">
+              <span class="badge bg-primary mb-2">Imagen</span>
+              <h4 class="fw-bold">La rebeldia del bohemio</h4>
+            </div>
+          </div>
+        </div>
+        <div class="col mb-4">
+          <div>
+            <a href="https://www.wikidata.org/wiki/Q134891507"
+              ><img
+                class="rounded img-fluid shadow w-100 fit-cover"
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f0/%C2%A1Eternamente_19%21_Mural_conmemorativo.jpg/960px-%C2%A1Eternamente_19%21_Mural_conmemorativo.jpg?20250613200355"
+                style="height: 250px"
+            /></a>
+            <div class="py-4">
+              <span class="badge bg-primary mb-2">Imagen</span>
+              <h4 class="fw-bold">Eternamente 19</h4>
+            </div>
+          </div>
+        </div>
+        <div class="col mb-4">
+          <div>
+            <a href="https://www.wikidata.org/wiki/Q134891263"
+              ><img
+                class="rounded img-fluid shadow w-100 fit-cover"
+                src="https://upload.wikimedia.org/wikipedia/commons/3/32/ARPA_OG_%28Original_Grafitti%29.jpg"
+                style="height: 250px"
+            /></a>
+            <div class="py-4">
+              <span class="badge bg-primary mb-2">Imagen</span>
+              <h4 class="fw-bold">ARPA OG</h4>
+            </div>
+          </div>
+        </div>
+        <div class="col mb-4">
+          <div>
+            <a href="#"
+              ><img
+                class="rounded img-fluid shadow w-100 fit-cover"
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/El_Performance.jpg/1200px-El_Performance.jpg?20250613200406"
+                style="height: 250px"
+            /></a>
+            <div class="py-4">
+              <span class="badge bg-primary mb-2">Imagen</span>
+              <h4 class="fw-bold">El performance</h4>
+            </div>
+          </div>
+        </div>
+        <div class="col mb-4">
+          <div>
+            <a href=""
+              ><img
+                class="rounded img-fluid shadow w-100 fit-cover"
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Mujeres_Olvidadas_en_la_Historia_del_Arte.jpg/1200px-Mujeres_Olvidadas_en_la_Historia_del_Arte.jpg?20250613200421"
+                style="height: 250px"
+            /></a>
+            <div class="py-4">
+              <span class="badge bg-primary mb-2">Imagen</span>
+              <h4 class="fw-bold">mujeres olvidadas</h4>
+            </div>
+          </div>
+        </div>
+        <div class="col mb-4">
+          <div>
+            <a href="https://www.wikidata.org/wiki/Q134891354"
+              ><img
+                class="rounded img-fluid shadow w-100 fit-cover"
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Impulso_Humano_Creador.jpg/1130px-Impulso_Humano_Creador.jpg?20250613200408"
+                style="height: 250px"
+            /></a>
+            <div class="py-4">
+              <span class="badge bg-primary mb-2">Imagen</span>
+              <h4 class="fw-bold">Impulso humano</h4>
+            </div>
+          </div>
+        </div>
+        <div class="col mb-4">
+          <div>
+            <a href="https://www.wikidata.org/wiki/Q134891315"
+              ><img
+                class="rounded img-fluid shadow w-100 fit-cover"
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/76/Toda_la_Energ%C3%ADa_al_Coraz%C3%B3n.jpg/960px-Toda_la_Energ%C3%ADa_al_Coraz%C3%B3n.jpg?20250613200424"
+                style="height: 250px"
+            /></a>
+            <div class="py-4">
+              <span class="badge bg-primary mb-2">Imagen</span>
+              <h4 class="fw-bold">Toda la energia al corazon</h4>
+            </div>
+          </div>
+        </div>
+        <div class="col mb-4">
+          <div>
+            <a href="https://www.wikidata.org/wiki/Q134891398"
+              ><img
+                class="rounded img-fluid shadow w-100 fit-cover"
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Historia_de_la_Radio_y_TV_BUAP.jpg/1167px-Historia_de_la_Radio_y_TV_BUAP.jpg?20250613200412"
+                style="height: 250px"
+            /></a>
+            <div class="py-4">
+              <span class="badge bg-primary mb-2">Imagen</span>
+              <h4 class="fw-bold">HISTORIA DE LA RADIO Y TV BUAP</h4>
+            </div>
+          </div>
+        </div>
+        <div class="col mb-4">
+          <div>
+            <a href="https://www.wikidata.org/wiki/Q134891270"
+              ><img
+                class="rounded img-fluid shadow w-100 fit-cover"
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Conf%C3%ADa.jpg/1200px-Conf%C3%ADa.jpg?20250613200402"
+                style="height: 250px"
+            /></a>
+            <div class="py-4">
+              <span class="badge bg-primary mb-2">Imagen</span>
+              <h4 class="fw-bold">Confia</h4>
+            </div>
+          </div>
+        </div>
+        <div class="col mb-4">
+          <div>
+            <a href="https://www.wikidata.org/wiki/Q134891047"
+              ><img
+                class="rounded img-fluid shadow w-100 fit-cover"
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/De_los_Cimientos%2C_Crecer%C3%A1s.jpg/1200px-De_los_Cimientos%2C_Crecer%C3%A1s.jpg?20250613200405"
+                style="height: 250px"
+            /></a>
+            <div class="py-4">
+              <span class="badge bg-primary mb-2">Imagen</span>
+              <h4 class="fw-bold">De los cimientos crecerás</h4>
+            </div>
+          </div>
+        </div>
+        <div class="col mb-4">
+          <div>
+            <a href="https://www.wikidata.org/wiki/Q134891069"
+              ><img
+                class="rounded img-fluid shadow w-100 fit-cover"
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Mil_Voces.jpg/1200px-Mil_Voces.jpg?20250613200415"
+                style="height: 250px"
+            /></a>
+            <div class="py-4">
+              <span class="badge bg-primary mb-2">Imagen</span>
+              <h4 class="fw-bold">Mil voces</h4>
+            </div>
+          </div>
+        </div>
+        <div class="col mb-4">
+          <div>
+            <a href="#"
+              ><img
+                class="rounded img-fluid shadow w-100 fit-cover"
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Lazo.jpg/1199px-Lazo.jpg?20250613200412"
+                style="height: 250px"
+            /></a>
+            <div class="py-4">
+              <span class="badge bg-primary mb-2">Imagen</span>
+              <h4 class="fw-bold">Lazo</h4>
+            </div>
+          </div>
+        </div>
+        <div class="col mb-4">
+          <div>
+            <a href="https://www.wikidata.org/wiki/Q134891458"
+              ><img
+                class="rounded img-fluid shadow w-100 fit-cover"
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Las_Hadas.jpg/1200px-Las_Hadas.jpg?20250613200412"
+                style="height: 250px"
+            /></a>
+            <div class="py-4">
+              <span class="badge bg-primary mb-2">Imagen</span>
+              <h4 class="fw-bold">LAS HADAS</h4>
+            </div>
+          </div>
+        </div>
+        <div class="col mb-4">
+          <div>
+            <a href="https://www.wikidata.org/wiki/Q134891299"
+              ><img
+                class="rounded img-fluid shadow w-100 fit-cover"
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ed/El_lobo.jpg/960px-El_lobo.jpg?20250613200405"
+                style="height: 250px"
+            /></a>
+            <div class="py-4">
+              <span class="badge bg-primary mb-2">Imagen</span>
+              <h4 class="fw-bold">EL LOBO</h4>
+            </div>
+          </div>
+        </div>
+        <div class="col mb-4">
+          <div>
+            <a href="https://www.wikidata.org/wiki/Q134891495"
+              ><img
+                class="rounded img-fluid shadow w-100 fit-cover"
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/32/CCU_15_a%C3%B1os_de_Arte_y_Cultura.jpg/1200px-CCU_15_a%C3%B1os_de_Arte_y_Cultura.jpg?20250613200402"
+                style="height: 250px"
+            /></a>
+            <div class="py-4">
+              <span class="badge bg-primary mb-2">Imagen</span>
+              <h4 class="fw-bold">CCU 15 AÑOS DE CULTURA</h4>
+            </div>
+          </div>
+        </div>
+        </div>
+      </div>
+    </section>
+    <footer class="bg-dark">
+      <div class="container py-4 py-lg-5">
+        <hr />
+        <div
+          class="text-muted d-flex justify-content-between align-items-center pt-3"
+        >
+          <p class="mb-0">GAIA 2025</p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/bold-and-dark.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.min.js"></script>
+    <script>
+      const murales = [
+  {
+    nombre: "Saturnino moon",
+    imagen: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Saturnino-Moon.jpg/1200px-Saturnino-Moon.jpg?20250613200424",
+    lat: 19.017859406,
+    lng: -98.235016958
+  },
+  {
+    nombre: "Metamorfosis marina",
+    imagen: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Metamorfosis_Marina.jpg/1278px-Metamorfosis_Marina.jpg?20250613200415",
+    lat: 19.017871451,
+    lng: -98.235057191
+  },
+  {
+    nombre: "Cansancio colectivo",
+    imagen: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/Cansancio_Colectivo.jpg/1200px-Cansancio_Colectivo.jpg?20250613200359",
+    lat: 19.017901343,
+    lng: -98.235113403
+  },
+  {
+    nombre: "Naturaleza Híbrida ",
+    imagen: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Naturaleza_H%C3%ADbrida.jpg/960px-Naturaleza_H%C3%ADbrida.jpg?20250613200422",
+    lat: 19.017906659,
+    lng: -98.235127119
+  },
+  {
+    nombre: "Viva viva",
+    imagen: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/%C2%A1Viva%2C_Viva%21.jpg/500px-%C2%A1Viva%2C_Viva%21.jpg?20250613200355",
+    lat: 19.0179149,
+    lng: -98.2351505
+  },
+  {
+    nombre: "Asientos preferentes",
+    imagen: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Asientos_Preferentes.jpg/960px-Asientos_Preferentes.jpg?20250613200359",
+    lat: 19.018016856,
+    lng: -98.235227782
+  },
+  {
+    nombre: "Cumbia te voy a olvidar",
+    imagen: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Cumbia_te_voy_a_olvidar.jpg/960px-Cumbia_te_voy_a_olvidar.jpg?20250613200403",
+    lat: 19.017970449,
+    lng: -98.235252932
+  },
+  {
+    nombre: "La rebeldia del bohemio",
+    imagen: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/La_Rebeld%C3%ADa_del_Bohemio.jpg/1199px-La_Rebeld%C3%ADa_del_Bohemio.jpg?20250613200409",
+    lat: 19.018008364,
+    lng: -98.235363381
+  },
+  {
+    nombre: "Eternamente 19",
+    imagen: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f0/%C2%A1Eternamente_19%21_Mural_conmemorativo.jpg/960px-%C2%A1Eternamente_19%21_Mural_conmemorativo.jpg?20250613200355",
+    lat: 19.017985159,
+    lng: -98.235302214
+  },
+  {
+    nombre: "ARPA OG",
+    imagen: "https://upload.wikimedia.org/wikipedia/commons/3/32/ARPA_OG_%28Original_Grafitti%29.jpg",
+    lat: 19.018003262,
+    lng: -98.235332202
+  },
+  {
+    nombre: "El performance",
+    imagen: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/El_Performance.jpg/1200px-El_Performance.jpg?20250613200406",
+    lat: 19.017999107,
+    lng: -98.235244318
+  },
+  {
+    nombre: "mujeres olvidadas",
+    imagen: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Mujeres_Olvidadas_en_la_Historia_del_Arte.jpg/1200px-Mujeres_Olvidadas_en_la_Historia_del_Arte.jpg?20250613200421",
+    lat: 19.017994293,
+    lng: -98.23529837
+  },
+  {
+    nombre: "Impulso humano",
+    imagen: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Impulso_Humano_Creador.jpg/1130px-Impulso_Humano_Creador.jpg?20250613200408",
+    lat: 19.0208512,
+    lng: -98.2421685
+  },
+  {
+    nombre: "Toda la energia al corazon",
+    imagen: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/76/Toda_la_Energ%C3%ADa_al_Coraz%C3%B3n.jpg/960px-Toda_la_Energ%C3%ADa_al_Coraz%C3%B3n.jpg?20250613200424",
+    lat: 19.020941156,
+    lng: -98.242114976
+  },
+  {
+    nombre: "HISTORIA DE LA RADIO Y TV BUAP",
+    imagen: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Historia_de_la_Radio_y_TV_BUAP.jpg/1167px-Historia_de_la_Radio_y_TV_BUAP.jpg?20250613200412",
+    lat: 19.020941156,
+    lng: -98.242114977
+  },
+  {
+    nombre: "confia",
+    imagen: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Conf%C3%ADa.jpg/1200px-Conf%C3%ADa.jpg?20250613200402",
+    lat: 19.020931844,
+    lng: -98.242109129
+  },
+  {
+    nombre: "De los cimientos crecerás",
+    imagen: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/De_los_Cimientos%2C_Crecer%C3%A1s.jpg/1200px-De_los_Cimientos%2C_Crecer%C3%A1s.jpg?20250613200405",
+    lat: 19.018117719,
+    lng: -98.234797195
+  },
+  {
+    nombre: "mil voces",
+    imagen: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Mil_Voces.jpg/1200px-Mil_Voces.jpg?20250613200415",
+    lat: 19.018140133,
+    lng: -98.234895819
+  },
+  {
+    nombre: "LAS HADAS",
+    imagen: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Las_Hadas.jpg/1200px-Las_Hadas.jpg?20250613200412",
+    lat: 19.020875443,
+    lng: -98.239965235
+  },
+  {
+    nombre: "EL LOBO",
+    imagen: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ed/El_lobo.jpg/960px-El_lobo.jpg?20250613200405",
+    lat: 19.020833112,
+    lng: -98.239935222
+  },
+  {
+    nombre: "CCU 15 AÑOS DE CULTURA",
+    imagen: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/32/CCU_15_a%C3%B1os_de_Arte_y_Cultura.jpg/1200px-CCU_15_a%C3%B1os_de_Arte_y_Cultura.jpg?20250613200402",
+    lat:  19.022134773105748, 
+    lng: -98.24312475758461
+  }
+];
+
+      const mapa = L.map("map").setView([19.0195, -98.2403], 17);
+
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        attribution: "&copy; OpenStreetMap contributors",
+      }).addTo(mapa);
+
+      const tooltip = document.getElementById("tooltip");
+
+      murales.forEach((mural) => {
+        const marker = L.marker([mural.lat, mural.lng], {
+          riseOnHover: true,
+          zIndexOffset: 1001,
+        }).addTo(mapa);
+
+        marker.on("mouseover", function (e) {
+          tooltip.style.display = "block";
+          tooltip.style.left = e.originalEvent.pageX + 10 + "px";
+          tooltip.style.top = e.originalEvent.pageY + 10 + "px";
+          tooltip.style.width = "160px";
+          tooltip.style.height = "170px";
+
+          tooltip.style.overflowY = "auto";
+          tooltip.innerHTML = `
+            <h4>${mural.nombre}</h4>
+            <img src="${mural.imagen}" alt="${mural.nombre}" style="width:100%; border-radius:8px; margin-bottom:8px;">
+            `;
+        });
+
+        marker.on("mouseout", function () {
+        });
+      });
+
+      tooltip.addEventListener("click", () => {
+        tooltip.style.display = "none";
+      });
+      document.getElementById("map").addEventListener("mouseenter", () => {
+        setTimeout(() => {
+          
+          tooltip.style.display = "none";
+        }, 2000);
+      });
+      const waypoints = murales.map((m) => L.latLng(m.lat, m.lng));
+      L.Routing.control({
+        waypoints: waypoints,
+        routeWhileDragging: false,
+        show: false,
+        addWaypoints: false,
+        draggableWaypoints: false,
+        fitSelectedRoutes: true,
+      }).addTo(mapa);
+
+      setTimeout(() => {
+        const panel = document.querySelector(".leaflet-routing-container");
+        if (panel) {
+          const boton = document.createElement("button");
+
+          panel.style.background = "rgba(0,0,0, .75)";
+          panel.style.padding = "30px";
+          panel.style.borderRadius = "8px";
+          panel.style.maxHeight = "200px";
+          panel.style.maxWidth = "70%";
+          panel.style.overflowY = "auto";
+          panel.style.display = "none";
+
+          boton.id = "toggle-instrucciones";
+          boton.textContent = "Mostrar instrucciones";
+          boton.className = "btn btn-primary btn-sm";
+          boton.style.position = "absolute";
+          boton.style.top = "10px";
+          boton.style.right = "20px";
+          boton.style.zIndex = 10001;
+
+          // Agregarlo al body
+          document.getElementById("map").appendChild(boton);
+          boton.addEventListener("click", () => {
+            const visible = panel.style.display === "block";
+            panel.style.display = visible ? "none" : "block";
+            boton.textContent = visible
+              ? "Mostrar instrucciones"
+              : "Ocultar instrucciones";
+            console.log("denro");
+          });
+        }
+      }, 400);
+    </script>
+  </body>
+</html>

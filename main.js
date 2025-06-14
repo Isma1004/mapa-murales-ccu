@@ -1,0 +1,1 @@
+// Este archivo es donde se pueden agregar scripts personalizados para la funcionalidad de la página.

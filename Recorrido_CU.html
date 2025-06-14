@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html data-bs-theme="dark" lang="es-mx">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, shrink-to-fit=no"
+    />
+    <title>Recorrido CU</title>
+    <link rel="stylesheet" href="../css/bootstrap.min.css" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Inter:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800&amp;display=swap"
+    />
+    <link rel="stylesheet" href="../css/bss-overrides.css" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
+    <style>
+      #map {
+        height: 85vh;
+        width: 100%;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      }
+      .leaflet-popup-content h3 {
+        margin: 0 0 5px;
+        font-size: 16px;
+        color: #0d6efd;
+      }
+      .leaflet-popup-content p {
+        margin: 0;
+        font-size: 14px;
+      }
+
+      .custom-tooltip:hover {
+        cursor: pointer;
+      }
+      .custom-tooltip {
+        display: none;
+        position: absolute;
+        z-index: 10000;
+        background: #fff;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        padding: 10px;
+        /* pointer-events: none; */
+        color: #333;
+      }
+    </style>
+  </head>
+
+  <body>
+    <nav
+      class="navbar navbar-expand-md sticky-top py-3 navbar-dark"
+      id="mainNav"
+    >
+      <div class="container">
+        <a class="navbar-brand d-flex align-items-center" href="/"
+          ><span>Murales Arpa</span></a
+        ><button
+          data-bs-toggle="collapse"
+          class="navbar-toggler"
+          data-bs-target="#navcol-1"
+        >
+          <span class="visually-hidden">Activar/desactivar navegación</span
+          ><span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navcol-1">
+          <ul class="navbar-nav mx-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="/index.html">Inicio</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/pages/recorridos.html"
+                ><span style="font-weight: normal !important"
+                  >Recorridos</span
+                ></a
+              >
+            </li>
+            <li class="nav-item"></li>
+            <li class="nav-item"></li>
+            <li class="nav-item">
+              <a class="nav-link" href="/pages/contactos.html">Contacto</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <section class="py-5">
+      <div class="container py-5">
+        <div class="row mb-5">
+          <div class="col-md-8 col-xl-6 text-center mx-auto">
+            <h2 class="fw-bold">Recorrido CU</h2>
+            <p class="text-muted">
+              Este recorrido es de la Ciudad Universitaria de la BUAP
+            </p>
+          </div>
+        </div>
+        <section class="py-5">
+          <div class="container text-center py-5">
+            <div class="row mb-4">
+              <div id="map"></div>
+              <div class="custom-tooltip" id="tooltip"></div>
+            </div>
+          </div>
+        </section>
+      </div>
+      <div
+        class="row row-cols-1 row-cols-md-2 mx-auto"
+        style="max-width: 900px"
+      >
+        <div class="col mb-4">
+          <div>
+            <a href=https://www.wikidata.org/wiki/Q134891421"
+              ><img
+                class="rounded img-fluid shadow w-100 fit-cover"
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Origen_%28mural%29.jpg/1200px-Origen_%28mural%29.jpg?20250613200421"
+                style="height: 250px"
+            /></a>
+            <div class="py-4">
+              <span class="badge bg-primary mb-2">Imagen</span>
+              <h4 class="fw-bold">Origen</h4>
+            </div>
+          </div>
+        </div>
+        <div class="col mb-4">
+          <div>
+            <a href="https://www.wikidata.org/wiki/Q134891499"
+              ><img
+                class="rounded img-fluid shadow w-100 fit-cover"
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Mi_coraz%C3%B3n_est%C3%A1_lleno_de_huellas.jpg/1200px-Mi_coraz%C3%B3n_est%C3%A1_lleno_de_huellas.jpg?20250613200415"
+                style="height: 250px"
+            /></a>
+            <div class="py-4">
+              <span class="badge bg-primary mb-2">Imagen</span>
+              <h4 class="fw-bold">Mi corazon esta lleno de huellas</h4>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <footer class="bg-dark">
+      <div class="container py-4 py-lg-5">
+        <hr />
+        <div
+          class="text-muted d-flex justify-content-between align-items-center pt-3"
+        >
+          <p class="mb-0">GAIA 2025</p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/bold-and-dark.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.min.js"></script>
+    <script>
+      const murales = [
+        {
+          nombre: "Origen",
+          imagen:
+            "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Origen_%28mural%29.jpg/1200px-Origen_%28mural%29.jpg?20250613200421",
+          lat: 19.002291768,    
+          lng: -98.201963846
+        },
+        {
+          nombre: "Mi corazon esta lleno de huellas",
+          imagen:"https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Mi_coraz%C3%B3n_est%C3%A1_lleno_de_huellas.jpg/1200px-Mi_coraz%C3%B3n_est%C3%A1_lleno_de_huellas.jpg?20250613200415",
+          lat: 18.997908111,   
+          lng:  -98.203524445
+        }
+      ];
+
+      const mapa = L.map("map").setView([19.0195, -98.2403], 17);
+
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        attribution: "&copy; OpenStreetMap contributors",
+      }).addTo(mapa);
+
+      const tooltip = document.getElementById("tooltip");
+
+      murales.forEach((mural) => {
+        const marker = L.marker([mural.lat, mural.lng], {
+          riseOnHover: true,
+          zIndexOffset: 1001,
+        }).addTo(mapa);
+
+        marker.on("mouseover", function (e) {
+          tooltip.style.display = "block";
+          tooltip.style.left = e.originalEvent.pageX + 10 + "px";
+          tooltip.style.top = e.originalEvent.pageY + 10 + "px";
+          tooltip.style.width = "160px";
+          tooltip.style.height = "170px";
+
+          tooltip.style.overflowY = "auto";
+          tooltip.innerHTML = `
+            <h4>${mural.nombre}</h4>
+            <img src="${mural.imagen}" alt="${mural.nombre}" style="width:100%; border-radius:8px; margin-bottom:8px;">
+            `;
+        });
+
+        marker.on("mouseout", function () {});
+      });
+
+      tooltip.addEventListener("click", () => {
+        tooltip.style.display = "none";
+      });
+      document.getElementById("map").addEventListener("mouseenter", () => {
+        setTimeout(() => {
+          tooltip.style.display = "none";
+        }, 2000);
+      });
+      const waypoints = murales.map((m) => L.latLng(m.lat, m.lng));
+      L.Routing.control({
+        waypoints: waypoints,
+        routeWhileDragging: false,
+        show: false,
+        addWaypoints: false,
+        draggableWaypoints: false,
+        fitSelectedRoutes: true,
+      }).addTo(mapa);
+
+      setTimeout(() => {
+        const panel = document.querySelector(".leaflet-routing-container");
+        if (panel) {
+          const boton = document.createElement("button");
+
+          panel.style.background = "rgba(0,0,0  , .75)";
+          panel.style.padding = "30px";
+          panel.style.borderRadius = "8px";
+          panel.style.maxHeight = "200px";
+          panel.style.maxWidth = "70%";
+          panel.style.overflowY = "auto";
+          panel.style.display = "none";
+
+          boton.id = "toggle-instrucciones";
+          boton.textContent = "Mostrar instrucciones";
+          boton.className = "btn btn-primary btn-sm";
+          boton.style.position = "absolute";
+          boton.style.top = "10px";
+          boton.style.right = "20px";
+          boton.style.zIndex = 10001;
+
+          // Agregarlo al body
+          document.getElementById("map").appendChild(boton);
+          boton.addEventListener("click", () => {
+            const visible = panel.style.display === "block";
+            panel.style.display = visible ? "none" : "block";
+            boton.textContent = visible
+              ? "Mostrar instrucciones"
+              : "Ocultar instrucciones";
+            console.log("denro");
+          });
+        }
+      }, 400);
+    </script>
+  </body>
+</html>
